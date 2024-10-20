@@ -1,31 +1,31 @@
-// controllers/authController.js
-const User = require("../models/User");
+const User = require("../models/User"); // Ensure you have the User model
 
-const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+// Login User
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
 
   try {
-    // Validate input
-    if (!name || !email || !password) {
-      return res
-        .status(400)
-        .json({ error: "Name, email, and password are required" });
+    // Find user by email
+    const user = await User.findOne({ email });
+
+    // If user not found, return an error
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ error: "User already exists" });
+    // Check password (remove hashing for now)
+    if (password !== user.password) {
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // Create new user
-    const newUser = new User({ name, email, password });
-    await newUser.save();
-    res.status(201).json({ message: "User registered successfully" });
+    // Successful login
+    return res.status(200).json({ message: "Login successful", user });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
-module.exports = { registerUser };
+module.exports = {
+  loginUser,
+};
