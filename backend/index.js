@@ -10,6 +10,10 @@ dotenv.config();
 connectDB();
 
 const app = express();
+const cors = require("cors");
+
+// Enable CORS
+app.use(cors());
 
 // Middleware to parse JSON request bodies
 app.use(express.json());
