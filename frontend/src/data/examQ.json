@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1,
+    "question": "What is the capital of France?",
+    "options": ["Paris", "London", "Berlin", "Madrid"],
+    "correctAnswer": "Paris"
+  },
+  {
+    "id": 2,
+    "question": "Which of the following is a prime number?",
+    "options": ["4", "6", "7", "9"],
+    "correctAnswer": "7"
+  },
+  {
+    "id": 3,
+    "question": "Who wrote 'Hamlet'?",
+    "options": [
+      "Charles Dickens",
+      "William Shakespeare",
+      "Mark Twain",
+      "Ernest Hemingway"
+    ],
+    "correctAnswer": "William Shakespeare"
+  },
+  {
+    "id": 4,
+    "question": "Which college is conducting Hackkshetra?",
+    "options": ["SJCE", "VVCE", "JSS STU", "JSS"],
+    "correctAnswer": "VVCE"
+  }
+]

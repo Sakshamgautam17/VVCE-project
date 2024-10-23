@@ -1,82 +1,39 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // To handle navigation
+import { useNavigate } from "react-router-dom";
 
 const Home = ({ onLogout }) => {
-  // Receive onLogout as a prop
   const navigate = useNavigate();
 
-  // Handlers for buttons
   const handleStartTest = () => {
-    alert("Start Test Clicked");
-    // Add routing to the start test page if needed
-    // Example: navigate('/start-test');
+    navigate("/begin"); // Navigate to the Begin page
   };
 
   const handleTrialTest = () => {
     alert("Trial Test Clicked");
-    // Add routing to the trial test page if needed
-    // Example: navigate('/trial-test');
   };
 
   const handleLogout = () => {
-    onLogout(); // Call the logout handler
-    navigate("/login"); // Redirect to login page
+    onLogout();
+    navigate("/login");
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.heading}>Welcome to the Home Page</h1>
-      <p style={styles.subHeading}>Please choose an option:</p>
-      <div style={styles.buttonContainer}>
-        <button style={styles.button} onClick={handleStartTest}>
+    <div className="flex flex-col items-center justify-center h-screen bg-base-200">
+      <h1 className="text-4xl font-bold mb-4">Let's get started!</h1>
+      <p className="text-lg mb-6">Please choose an option:</p>
+      <div className="space-x-4">
+        <button className="btn btn-primary text-2xl" onClick={handleStartTest}>
           Start Test
         </button>
-        <button style={styles.button} onClick={handleTrialTest}>
+        <button className="btn btn-primary text-2xl" onClick={handleTrialTest}>
           Trial Test
         </button>
-        <button style={styles.button} onClick={handleLogout}>
+        <button className="btn btn-primary text-2xl" onClick={handleLogout}>
           Logout
         </button>
       </div>
     </div>
   );
-};
-
-// Styles for the Home page remain the same
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100vh", // Full height of viewport
-    width: "100vw", // Full width of viewport
-    backgroundColor: "rgb(200, 220, 240)", // RGB background color
-    textAlign: "center", // Center the text horizontally
-  },
-  heading: {
-    fontSize: "36px",
-    marginBottom: "20px",
-    color: "black", // Heading text color
-  },
-  subHeading: {
-    fontSize: "18px",
-    marginBottom: "30px",
-  },
-  buttonContainer: {
-    display: "flex",
-    gap: "20px", // Space between the buttons
-  },
-  button: {
-    padding: "15px 30px",
-    fontSize: "18px",
-    backgroundColor: "#007bff",
-    color: "#fff",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    transition: "background-color 0.3s ease",
-  },
 };
 
 export default Home;

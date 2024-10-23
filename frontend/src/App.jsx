@@ -6,13 +6,15 @@ import {
   Navigate,
 } from "react-router-dom";
 import "./App.css";
-import Login from "./components/Login"; // Importing the Login component
-import Home from "./components/Home"; // Importing the Home component
+import Login from "./components/Login";
+import Home from "./components/Home";
+import Begin from "./components/Begin";
+import Exam from "./components/Exam"; // Import the Exam component
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Effect to retrieve the login state from local storage on initial render
+  // Check if user is logged in using localStorage
   useEffect(() => {
     const storedLoginState = localStorage.getItem("isLoggedIn");
     if (storedLoginState === "true") {
@@ -20,29 +22,27 @@ function App() {
     }
   }, []);
 
-  // Function to handle successful login
   const handleLogin = () => {
     setIsLoggedIn(true);
-    localStorage.setItem("isLoggedIn", "true"); // Save login state to local storage
+    localStorage.setItem("isLoggedIn", "true");
   };
 
-  // Function to handle logout
   const handleLogout = () => {
     setIsLoggedIn(false);
-    localStorage.removeItem("isLoggedIn"); // Remove login state from local storage
+    localStorage.removeItem("isLoggedIn");
   };
 
   return (
     <Router>
       <div>
         <Routes>
-          {/* Default route redirects to the login page */}
+          {/* Redirect to login if user not logged in */}
           <Route path="/" element={<Navigate to="/login" />} />
 
-          {/* Define the route for the login page */}
+          {/* Login page route */}
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
 
-          {/* Define the route for the home page; redirect to login if not logged in */}
+          {/* Home route protected by authentication */}
           <Route
             path="/home"
             element={
@@ -54,7 +54,17 @@ function App() {
             }
           />
 
-          {/* You can add more routes here as needed */}
+          {/* Begin page protected by authentication */}
+          <Route
+            path="/begin"
+            element={isLoggedIn ? <Begin /> : <Navigate to="/login" />}
+          />
+
+          {/* Exam page protected by authentication */}
+          <Route
+            path="/exam"
+            element={isLoggedIn ? <Exam /> : <Navigate to="/login" />}
+          />
         </Routes>
       </div>
     </Router>
