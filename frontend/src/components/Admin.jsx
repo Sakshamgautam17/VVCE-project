@@ -21,12 +21,18 @@ const Admin = () => {
   };
 
   const handleFileUpload = (file, type) => {
-    // Simulating file upload for demonstration
     const formData = new FormData();
     formData.append("file", file);
-    console.log(`${type} uploaded:`, file);
 
-    // Implement actual upload logic with backend here
+    const endpoint = "http://localhost:5000/api/uploads/students";
+
+    fetch(endpoint, {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(`${type} uploaded successfully`, data))
+      .catch((error) => console.error(`Error uploading ${type}:`, error));
   };
 
   const handleSubmit = (e) => {
