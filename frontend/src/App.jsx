@@ -10,6 +10,7 @@ import Login from "./components/Login";
 import Home from "./components/Home";
 import Begin from "./components/Begin";
 import Exam from "./components/Exam"; // Import the Exam component
+import Admin from "./components/Admin";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -64,6 +65,11 @@ function App() {
           <Route
             path="/exam"
             element={isLoggedIn ? <Exam /> : <Navigate to="/login" />}
+          />
+
+          <Route
+            path="/admin"
+            element={isLoggedIn ? <Admin /> : <Navigate to="/login" />}
           />
         </Routes>
       </div>
