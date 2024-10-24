@@ -25,7 +25,7 @@ const Home = ({ onLogout }) => {
         <button className="btn btn-primary text-2xl" onClick={handleStartTest}>
           Start Test
         </button>
-        <button className="btn btn-primary text-2xl" onClick={handleTrialTest}>
+        <button className="btn btn-primary text-2xl" onClick={handleStartTest}>
           Trial Test
         </button>
         <button className="btn btn-primary text-2xl" onClick={handleLogout}>
