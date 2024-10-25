@@ -4,37 +4,53 @@ import { useNavigate } from "react-router-dom";
 const Admin = () => {
   const [questionFile, setQuestionFile] = useState(null);
   const [studentFile, setStudentFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState(""); // For feedback after file upload
   const navigate = useNavigate();
 
+  // Handle question file selection
   const handleQuestionFileChange = (e) => {
     const file = e.target.files[0];
-    if (file && file.type === "application/vnd.ms-excel") {
+    if (file && file.type === "text/csv") {
       setQuestionFile(file);
     }
   };
 
+  // Handle student file selection
   const handleStudentFileChange = (e) => {
     const file = e.target.files[0];
-    if (file && file.type === "application/vnd.ms-excel") {
+    if (file && file.type === "text/csv") {
       setStudentFile(file);
     }
   };
 
+  // Handle file uploads dynamically based on the file type
   const handleFileUpload = (file, type) => {
     const formData = new FormData();
     formData.append("file", file);
 
-    const endpoint = "http://localhost:5000/api/uploads/students";
+    // Set different endpoints for student list and question paper uploads
+    const endpoint =
+      type === "Student List"
+        ? "http://localhost:5000/api/uploads/students"
+        : "http://localhost:5000/api/uploads/questions";
 
+    // Perform the file upload
     fetch(endpoint, {
       method: "POST",
       body: formData,
     })
       .then((res) => res.json())
-      .then((data) => console.log(`${type} uploaded successfully`, data))
-      .catch((error) => console.error(`Error uploading ${type}:`, error));
+      .then((data) => {
+        setUploadStatus(`${type} uploaded successfully`);
+        console.log(`${type} uploaded successfully`, data);
+      })
+      .catch((error) => {
+        setUploadStatus(`Error uploading ${type}: ${error.message}`);
+        console.error(`Error uploading ${type}:`, error);
+      });
   };
 
+  // Handle submit when both files are uploaded
   const handleSubmit = (e) => {
     e.preventDefault();
     if (questionFile) handleFileUpload(questionFile, "Question Paper");
@@ -105,6 +121,8 @@ const Admin = () => {
         >
           Upload Files
         </button>
+        {/* Display upload status */}
+        {uploadStatus && <p className="mt-4 text-green-600">{uploadStatus}</p>}
       </div>
     </div>
   );
