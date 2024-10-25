@@ -52,31 +52,31 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="card w-96 bg-white shadow-lg rounded-lg overflow-hidden">
-        <div className="card-body p-6">
-          <h2 className="text-2xl font-bold text-center mb-4">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-indigo-200">
+      <div className="card w-96 bg-white shadow-xl rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105">
+        <div className="card-body p-8">
+          <h2 className="text-3xl font-semibold text-center mb-6 text-indigo-600">
             {loginMode === "admin" ? "Admin Login" : "Student Login"}
           </h2>
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
           {/* Radio buttons for selecting login mode */}
-          <div className="flex justify-center mb-4">
-            <label className="mr-4 cursor-pointer">
+          <div className="flex justify-center mb-6 space-x-4">
+            <label className="flex items-center cursor-pointer">
               <input
                 type="radio"
                 name="loginMode"
-                className="radio"
+                className="radio radio-primary"
                 checked={loginMode === "student"}
                 onChange={() => setLoginMode("student")}
               />
               <span className="ml-2 text-gray-700">Student Login</span>
             </label>
-            <label className="cursor-pointer">
+            <label className="flex items-center cursor-pointer">
               <input
                 type="radio"
                 name="loginMode"
-                className="radio"
+                className="radio radio-primary"
                 checked={loginMode === "admin"}
                 onChange={() => setLoginMode("admin")}
               />
@@ -89,23 +89,23 @@ const Login = ({ onLogin }) => {
               <input
                 type="email"
                 placeholder="Email"
-                className="input input-bordered w-full py-2 px-4 border rounded-lg"
+                className="input input-bordered w-full py-3 px-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-150"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className="form-control mb-4">
+            <div className="form-control mb-6">
               <input
                 type="password"
                 placeholder="Password"
-                className="input input-bordered w-full py-2 px-4 border rounded-lg"
+                className="input input-bordered w-full py-3 px-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-150"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div className="form-control">
               <button
-                className="btn btn-primary w-full py-2 rounded-lg text- hover:bg-blue-700 transition duration-200"
+                className="btn btn-primary w-full py-3 rounded-lg hover:bg-blue-600 transition duration-200 transform hover:scale-105"
                 type="submit"
               >
                 {loginMode === "admin" ? "Login as Admin" : "Login as Student"}
