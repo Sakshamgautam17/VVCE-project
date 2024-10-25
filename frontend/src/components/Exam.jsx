@@ -8,6 +8,10 @@ const Exam = () => {
   const [timeLeft, setTimeLeft] = useState(600); // 10 minutes
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [isExamOver, setIsExamOver] = useState(false);
+  const [isNPressed, setIsNPressed] = useState(false);
+  const nKeyRef = useRef(false);
+
+
 
   // Proctoring states
   const [status, setStatus] = useState({ person_count: 0, cellphone_detected: false });
@@ -30,11 +34,45 @@ const Exam = () => {
   const [isCheckPassed, setIsCheckPassed] = useState(false);
   const [checkStatus, setCheckStatus] = useState("Initializing...");
 
+    // Modified N key handler
+    useEffect(() => {
+      console.log('Setting up N key handler');
+      
+      const handleKeyPress = (event) => {
+        if (event.key === 'n' || event.key === 'N') {
+          console.log('N key pressed - updating state');
+          nKeyRef.current = true;
+          setIsNPressed(true);
+        }
+      };
+  
+      window.addEventListener('keydown', handleKeyPress);
+      
+      return () => {
+        console.log('Cleaning up N key handler');
+        window.removeEventListener('keydown', handleKeyPress);
+      };
+    }, []);
+    
+ // Initialize exam and monitoring
+ useEffect(() => {
+  if (isInitialCheck) {
+    startProctoring();
+    checkEnvironment();
+    fetchMCQs();
+    const cleanup = monitorTabSwitch();
+    return () => {
+      cleanup();
+      stopProctoring();
+    };
+  }
+}, [isInitialCheck]);
+
   // Initialize exam and monitoring
   useEffect(() => {
     if (isInitialCheck) {
       startProctoring();
-      checkEnvironment();
+      checkEnvironment();  // Initialize the environment check
       fetchMCQs();
       const cleanup = monitorTabSwitch();
       return () => {
@@ -42,7 +80,7 @@ const Exam = () => {
         stopProctoring();
       };
     }
-  }, []);
+  }, [isInitialCheck]);
 
   // Start continuous monitoring after exam starts
   useEffect(() => {
@@ -217,11 +255,17 @@ const Exam = () => {
 
   // Initial environment check
   const checkEnvironment = () => {
+    console.log('Starting environment check');
+    
     const checkInterval = setInterval(() => {
+      console.log('Checking environment...', { isNPressed: nKeyRef.current });
+      
       fetch("http://127.0.0.1:5000/status")
         .then((response) => response.json())
         .then((data) => {
+          console.log('Status data:', data);
           setStatus(data);
+          
           if (data.cellphone_detected) {
             setCheckStatus("⚠️ Please remove any phones from the camera view");
           } else if (data.person_count === 0) {
@@ -229,12 +273,21 @@ const Exam = () => {
           } else if (data.person_count > 1) {
             setCheckStatus("⚠️ Only one person should be visible");
           } else if (data.person_count === 1 && !data.cellphone_detected) {
-            setCheckStatus("✅ Environment check passed! Starting exam in 3 seconds...");
-            setTimeout(() => {
+            if (!nKeyRef.current) {
+              setCheckStatus("Authorizing person...");
+            } else {
+              console.log('All conditions met, transitioning to exam');
+              setCheckStatus("✅ Environment check passed! Starting exam in 3 seconds...");
+              
+              // Clear the interval immediately
               clearInterval(checkInterval);
-              setIsInitialCheck(false);
-              setIsCheckPassed(true);
-            }, 3000);
+              
+              // Set a 3-second delay before setting the final states
+              setTimeout(() => {
+                setIsInitialCheck(false);
+                setIsCheckPassed(true);
+              }, 3000);
+            }
           }
         })
         .catch((error) => {
@@ -243,8 +296,13 @@ const Exam = () => {
         });
     }, 1000);
 
-    return () => clearInterval(checkInterval);
+    return () => {
+      console.log('Cleaning up interval');
+      clearInterval(checkInterval);
+    };
   };
+
+
 
   // Capture violation screenshot
   const captureViolationScreenshot = () => {
@@ -315,7 +373,7 @@ const Exam = () => {
               <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
                 <span>Person Detected:</span>
                 <span className={`font-bold ${status.person_count === 1 ? "text-green-600" : "text-red-600"}`}>
-                  {status.person_count === 1 ? "✅" : "❌"}
+                  {(status.person_count === 1 && isNPressed) ? "✅" : "❌"}
                 </span>
               </div>
               <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
