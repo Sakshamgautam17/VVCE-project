@@ -82,7 +82,10 @@ function App() {
           />
 
           {/* Response page route */}
-          <Route path="/response" element={<Response />} />
+          <Route
+            path="/response"
+            element={isLoggedIn ? <Response /> : <Navigate to="/login" />}
+          />
         </Routes>
       </div>
     </Router>

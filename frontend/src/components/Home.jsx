@@ -71,7 +71,7 @@ const Home = ({ onLogout }) => {
 
       {/* Optional Footer */}
       <footer className="absolute bottom-4 text-white text-sm">
-        <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+        <p>&copy; 2024 reactJK. All rights reserved.</p>
       </footer>
     </div>
   );
