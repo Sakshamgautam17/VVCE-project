@@ -1,0 +1,71 @@
+Computer Science Basic MCQs
+
+1. Which of the following is the brain of the computer?
+   A) Monitor
+   B) CPU
+   C) Keyboard
+   D) Mouse
+   Answer: B) CPU
+
+2. What does RAM stand for?
+   A) Random Access Memory
+   B) Read Access Memory
+   C) Read And Memory
+   D) Random Action Memory
+   Answer: A) Random Access Memory
+
+3. Which language is known as the "mother of all programming languages"?
+   A) C++
+   B) Python
+   C) Assembly Language
+   D) COBOL
+   Answer: C) Assembly Language
+
+4. Which of these is not an operating system?
+   A) Windows
+   B) Linux
+   C) Python
+   D) macOS
+   Answer: C) Python
+
+5. What does HTML stand for?
+   A) Hyper Trainer Markup Language
+   B) Hyper Text Markup Language
+   C) Hyper Text Manipulation Language
+   D) Hyper Tool Markup Language
+   Answer: B) Hyper Text Markup Language
+
+6. In binary code, which digit is not used?
+   A) 1
+   B) 2
+   C) 0
+   D) Both A and C
+   Answer: B) 2
+
+7. Which type of network covers a large geographic area such as a country or the globe?
+   A) LAN
+   B) MAN
+   C) WAN
+   D) CAN
+   Answer: C) WAN
+
+8. What is the main function of a firewall?
+   A) Data encryption
+   B) To monitor the CPU temperature
+   C) To block unauthorized access
+   D) To speed up the computer
+   Answer: C) To block unauthorized access
+
+9. Which data structure uses LIFO order?
+   A) Queue
+   B) Stack
+   C) Linked List
+   D) Tree
+   Answer: B) Stack
+
+10. Which of the following is used to uniquely identify a webpage on the internet?
+    A) URL
+    B) IP Address
+    C) DNS
+    D) HTTP
+    Answer: A) URL

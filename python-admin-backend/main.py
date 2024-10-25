@@ -93,11 +93,15 @@ def upload_document():
     if file.filename == '':
         return jsonify({"error": "No file selected"}), 400
 
-    filename = secure_filename(file.filename)
+    # Extract the file extension
+    file_extension = os.path.splitext(file.filename)[1]
+    # Set the constant filename with the original extension
+    filename = f"exam{file_extension}"
     file_path = os.path.join(UPLOAD_FOLDER, filename)
     file.save(file_path)
 
     return jsonify({"message": "Document uploaded successfully"}), 201
+
 
 @app.route('/fetch-mcq', methods=['GET'])
 def fetch_mcq():
