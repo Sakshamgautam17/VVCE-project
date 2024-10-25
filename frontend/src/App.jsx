@@ -13,6 +13,7 @@ import Exam from "./components/Exam";
 import Admin from "./components/Admin";
 import BeginTrial from "./components/BeginTrial";
 import TrialTest from "./components/TrialTest"; // Import the TrialTest component
+import Response from "./components/Response"; // Import the Response component
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -79,6 +80,9 @@ function App() {
             path="/trial-exam"
             element={isLoggedIn ? <TrialTest /> : <Navigate to="/login" />}
           />
+
+          {/* Response page route */}
+          <Route path="/response" element={<Response />} />
         </Routes>
       </div>
     </Router>

@@ -58,14 +58,14 @@ const Login = ({ onLogin }) => {
 
       {/* Card Container */}
       <div className="relative z-10 card w-96 bg-white shadow-2xl rounded-2xl overflow-hidden p-8 transform transition-all duration-500 hover:scale-105">
-        <h2 className="text-3xl font-semibold text-center mb-6 text-indigo-700">
-          {loginMode === "admin" ? "Admin Login" : "Student Login"}
-        </h2>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+    <h2 className="text-3xl font-semibold text-center mb-6 text-indigo-700">
+      {loginMode === "admin" ? "Admin Login" : "Student Login"}
+    </h2>
+    {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
         {/* Toggle Button for Login Mode */}
-        <div className="flex justify-center mb-6">
-          <span className="text-gray-700 mr-2 font-medium">Student</span>
+        <div className="flex items-center justify-between mb-6">
+          <span className="text-gray-700 font-medium">Student</span>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
@@ -81,7 +81,7 @@ const Login = ({ onLogin }) => {
               ></div>
             </div>
           </label>
-          <span className="text-gray-700 ml-2 font-medium">Admin</span>
+          <span className="text-gray-700 font-medium">Admin</span>
         </div>
 
         {/* Login Form */}
