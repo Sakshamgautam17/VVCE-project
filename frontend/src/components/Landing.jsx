@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Camera, Shield } from "lucide-react";
-// import bg from '../assets/bg.gif'
+import { Camera, Shield, Eye, CheckCircle } from "lucide-react";
+import bg from '../bg.gif'
 // Simple Button component since we can't access shadcn/ui
 const Button = ({ children, variant = "default", className = "", onClick, ...props }) => {
   const baseStyles = "px-4 py-2 rounded-md font-medium transition-all duration-200";
@@ -44,11 +44,13 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Video Background */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-black/60 z-10" />
-        {/* <img src={bg}/> */}
-      </div>
+  {/* Video Background */}
+  <div className="fixed inset-0 z-0">
+    <div className="absolute inset-0 bg-black/60 z-10" />
+    <img src={bg} className="w-full h-full object-cover" alt="background" />
+  </div>
+
+
 
       {/* Navbar */}
       <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? "bg-black/80 backdrop-blur-lg" : "bg-transparent"}`}>
@@ -91,32 +93,49 @@ const LandingPage = () => {
       </div>
 
       {/* Features Grid */}
-      <div ref={featuresRef} className="relative z-10 bg-black/80 backdrop-blur-lg py-32">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[
-              {
-                icon: <Camera className="w-12 h-12 text-blue-400" />,
-                title: "Real-time Monitoring",
-                description: "Advanced facial recognition and environment scanning"
-              },
-              {
-                icon: <Shield className="w-12 h-12 text-blue-400" />,
-                title: "Fraud Prevention",
-                description: "AI-powered behavior analysis and pattern detection"
-              }
-            ].map((feature, index) => (
-              <div key={index} className="group p-8 rounded-2xl bg-gradient-to-br from-gray-900/80 to-gray-800/80 hover:from-blue-900/20 hover:to-cyan-900/20 transition-all duration-300 backdrop-blur-sm">
-                <div className="mb-6 transform group-hover:scale-110 transition-transform">
-                  {feature.icon}
-                </div>
-                <h3 className="text-2xl font-semibold mb-4">{feature.title}</h3>
-                <p className="text-gray-400">{feature.description}</p>
-              </div>
-            ))}
+<div ref={featuresRef} className="relative z-10 bg-black/80 backdrop-blur-lg py-32">
+  <div className="max-w-7xl mx-auto px-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12"> {/* Adjusted grid layout */}
+      {[
+        {
+          icon: <Camera className="w-12 h-12 text-blue-400" />,
+          title: "Real-time Monitoring",
+          description: "Advanced facial recognition and environment scanning"
+        },
+        {
+          icon: <Shield className="w-12 h-12 text-blue-400" />,
+          title: "Fraud Prevention",
+          description: "AI-powered behavior analysis and pattern detection"
+        },
+        {
+          icon: <Eye className="w-12 h-12 text-blue-400" />, // New icon suggestion
+          title: "No Manual Invigilation",
+          description: "Fully automated monitoring through advanced AI technology"
+        },
+        {
+          icon: <CheckCircle className="w-12 h-12 text-blue-400" />, // New icon suggestion
+          title: "Easy and Convenient to Use",
+          description: "User-friendly design with minimal setup required"
+        }
+      ].map((feature, index) => (
+        <div
+          key={index}
+          className="group p-8 rounded-2xl bg-gradient-to-br from-gray-900/80 to-gray-800/80 
+            hover:from-blue-900/20 hover:to-cyan-900/20 transition-all duration-300 backdrop-blur-sm"
+        >
+          <div className="mb-6 transform group-hover:scale-110 transition-transform">
+            {feature.icon}
           </div>
+          <h3 className="text-2xl font-semibold mb-4">{feature.title}</h3>
+          <p className="text-gray-400">{feature.description}</p>
         </div>
-      </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+
+
     </div>
   );
 };
