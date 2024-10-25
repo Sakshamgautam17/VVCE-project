@@ -2,6 +2,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
+const examRoutes = require("./routes/examRoutes");
 // Load environment variables
 dotenv.config();
 
@@ -16,7 +17,7 @@ app.use(cors());
 
 // Middleware to parse JSON request bodies
 app.use(express.json());
-
+app.use("/api", examRoutes);
 // Routes
 app.use("/api/auth", require("./routes/auth"));
 const PORT = 5000;
