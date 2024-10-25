@@ -5,7 +5,7 @@ const Exam = () => {
   const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes
+  const [timeLeft, setTimeLeft] = useState(600); 
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [isExamOver, setIsExamOver] = useState(false);
   const [isNPressed, setIsNPressed] = useState(false);
