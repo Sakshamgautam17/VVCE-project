@@ -43,7 +43,7 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 to-indigo-900 relative overflow-hidden">
+    <div className="flex items-center justify-center min-h-screen-92 bg-gradient-to-br from-blue-900 to-indigo-900 relative overflow-hidden">
       {/* Background Overlay */}
       <div className="absolute inset-0 bg-opacity-40 bg-black"></div>
 

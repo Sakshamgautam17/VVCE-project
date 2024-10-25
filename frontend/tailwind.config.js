@@ -2,7 +2,9 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {minHeight: {
+      'screen-92': '91vh',
+    },},
   },
   plugins: [require("daisyui")],
 };
