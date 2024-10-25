@@ -18,8 +18,8 @@ const Login = ({ onLogin }) => {
     try {
       const loginUrl =
         loginMode === "admin"
-          ? "http://localhost:5000/api/auth/admin-login" // Admin login URL
-          : "http://localhost:5000/api/auth/login"; // Student login URL
+          ? "http://localhost:5000/api/auth/admin-login"
+          : "http://localhost:5000/api/auth/login";
 
       const response = await fetch(loginUrl, {
         method: "POST",
@@ -31,20 +31,11 @@ const Login = ({ onLogin }) => {
 
       const data = await response.json();
 
-      if (loginMode === "admin") {
-        if (response.ok) {
-          onLogin();
-          navigate("/admin");
-        } else {
-          setError(data.message || "Login failed");
-        }
+      if (response.ok) {
+        onLogin();
+        navigate(loginMode === "admin" ? "/admin" : "/home");
       } else {
-        if (response.ok) {
-          onLogin();
-          navigate("/home");
-        } else {
-          setError(data.message || "Login failed");
-        }
+        setError(data.message || "Login failed");
       }
     } catch (err) {
       setError("An error occurred. Please try again.");
@@ -52,16 +43,24 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-indigo-200">
-      <div className="card w-96 bg-white shadow-xl rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 to-indigo-900 relative overflow-hidden">
+      {/* Background Overlay */}
+      <div className="absolute inset-0 bg-opacity-40 bg-black"></div>
+
+      {/* Animated Background Shapes */}
+      <div className="absolute top-20 left-10 bg-indigo-400 w-40 h-40 rounded-full opacity-30 animate-pulse"></div>
+      <div className="absolute bottom-20 right-10 bg-blue-400 w-52 h-52 rounded-full opacity-30 animate-pulse"></div>
+
+      {/* Card Container */}
+      <div className="relative z-10 card w-96 bg-white shadow-2xl rounded-2xl overflow-hidden transform transition-all duration-500 hover:scale-105">
         <div className="card-body p-8">
-          <h2 className="text-3xl font-semibold text-center mb-6 text-indigo-600">
+          <h2 className="text-3xl font-semibold text-center mb-6 text-indigo-700">
             {loginMode === "admin" ? "Admin Login" : "Student Login"}
           </h2>
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
-          {/* Radio buttons for selecting login mode */}
-          <div className="flex justify-center mb-6 space-x-4">
+          {/* Login Mode Selector */}
+          <div className="flex justify-center mb-6 space-x-6">
             <label className="flex items-center cursor-pointer">
               <input
                 type="radio"
@@ -70,7 +69,7 @@ const Login = ({ onLogin }) => {
                 checked={loginMode === "student"}
                 onChange={() => setLoginMode("student")}
               />
-              <span className="ml-2 text-gray-700">Student Login</span>
+              <span className="ml-2 text-gray-700 font-medium">Student</span>
             </label>
             <label className="flex items-center cursor-pointer">
               <input
@@ -80,16 +79,17 @@ const Login = ({ onLogin }) => {
                 checked={loginMode === "admin"}
                 onChange={() => setLoginMode("admin")}
               />
-              <span className="ml-2 text-gray-700">Admin Login</span>
+              <span className="ml-2 text-gray-700 font-medium">Admin</span>
             </label>
           </div>
 
+          {/* Login Form */}
           <form onSubmit={handleSubmit}>
             <div className="form-control mb-4">
               <input
                 type="email"
                 placeholder="Email"
-                className="input input-bordered w-full py-3 px-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-150"
+                className="input input-bordered w-full py-3 px-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-200"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -98,14 +98,14 @@ const Login = ({ onLogin }) => {
               <input
                 type="password"
                 placeholder="Password"
-                className="input input-bordered w-full py-3 px-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-150"
+                className="input input-bordered w-full py-3 px-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition duration-200"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div className="form-control">
               <button
-                className="btn btn-primary w-full py-3 rounded-lg hover:bg-blue-600 transition duration-200 transform hover:scale-105"
+                className="btn btn-primary w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 transition duration-300 transform hover:scale-105"
                 type="submit"
               >
                 {loginMode === "admin" ? "Login as Admin" : "Login as Student"}
