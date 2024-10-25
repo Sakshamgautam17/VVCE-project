@@ -64,8 +64,8 @@ const Login = ({ onLogin }) => {
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
         {/* Toggle Button for Login Mode */}
-        <div className="flex items-center justify-between mb-6">
-          <span className="text-gray-700 font-medium">Student</span>
+        <div className="flex justify-center mb-6">
+          <span className="text-gray-700 mr-2 font-medium">Student</span>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
@@ -81,7 +81,7 @@ const Login = ({ onLogin }) => {
               ></div>
             </div>
           </label>
-          <span className="text-gray-700 font-medium">Admin</span>
+          <span className="text-gray-700 ml-2 font-medium">Admin</span>
         </div>
 
         {/* Login Form */}
@@ -119,3 +119,4 @@ const Login = ({ onLogin }) => {
 };
 
 export default Login;
+    
