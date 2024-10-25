@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import data from "../data/examQ.json"; // Importing questions from the JSON file
 
 const Exam = () => {
   const navigate = useNavigate();
@@ -9,7 +8,7 @@ const Exam = () => {
   const [timeLeft, setTimeLeft] = useState(600);
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [isExamOver, setIsExamOver] = useState(false);
-  
+
   // Proctoring states
   const [status, setStatus] = useState({ person_count: 0, cellphone_detected: false });
   const [warnings, setWarnings] = useState({
@@ -24,14 +23,13 @@ const Exam = () => {
   const [isInitialCheck, setIsInitialCheck] = useState(true);
   const [isCheckPassed, setIsCheckPassed] = useState(false);
   const [checkStatus, setCheckStatus] = useState("Initializing...");
-  
-  // Start initial check when component mounts
+
+  // Start fetching questions and initial proctoring check
   useEffect(() => {
     if (isInitialCheck) {
       startProctoring();
       checkEnvironment();
-      // Load questions from JSON file on mount
-      setQuestions(data);
+      fetchMCQs();
     }
     return () => {
       if (!isCheckPassed) {
@@ -40,25 +38,40 @@ const Exam = () => {
     };
   }, []);
 
+  const fetchMCQs = () => {
+    fetch("http://127.0.0.1:5001/fetch-mcq")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.mcq_data) {
+          setQuestions(data.mcq_data);
+        } else {
+          console.error("Failed to load questions:", data.error);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching questions:", error);
+      });
+  };
+
   const startProctoring = () => {
-    fetch('http://127.0.0.1:5000/start')
+    fetch("http://127.0.0.1:5000/start")
       .then(response => response.json())
-      .catch(error => console.error('Error starting proctoring:', error));
+      .catch(error => console.error("Error starting proctoring:", error));
   };
 
   const stopProctoring = () => {
-    fetch('http://127.0.0.1:5000/stop')
+    fetch("http://127.0.0.1:5000/stop")
       .then(response => response.json())
-      .catch(error => console.error('Error stopping proctoring:', error));
+      .catch(error => console.error("Error stopping proctoring:", error));
   };
 
   const checkEnvironment = () => {
     let checkInterval = setInterval(() => {
-      fetch('http://127.0.0.1:5000/status')
+      fetch("http://127.0.0.1:5000/status")
         .then(response => response.json())
         .then(data => {
           setStatus(data);
-          
+
           if (data.cellphone_detected) {
             setCheckStatus("⚠️ Please remove any phones from the camera view");
           } else if (data.person_count === 0) {
@@ -75,7 +88,7 @@ const Exam = () => {
           }
         })
         .catch(error => {
-          console.error('Error:', error);
+          console.error("Error:", error);
           setCheckStatus("⚠️ Error connecting to proctoring system");
         });
     }, 1000);
@@ -83,7 +96,7 @@ const Exam = () => {
     return () => clearInterval(checkInterval);
   };
 
-  const addAlert = (message, type = 'warning') => {
+  const addAlert = (message, type = "warning") => {
     const id = alertIdCounter.current++;
     setAlerts(prev => [...prev, { id, message, type }]);
     setTimeout(() => {
@@ -92,16 +105,16 @@ const Exam = () => {
   };
 
   const captureScreenshot = () => {
-    fetch('http://127.0.0.1:5000/screenshot')
+    fetch("http://127.0.0.1:5000/screenshot")
       .then(response => response.json())
       .then(data => {
-        if (data.status === 'Screenshot saved') {
-          addAlert(`Screenshot saved as ${data.filename}`, 'info');
+        if (data.status === "Screenshot saved") {
+          addAlert(`Screenshot saved as ${data.filename}`, "info");
         } else {
-          addAlert('Failed to capture screenshot', 'error');
+          addAlert("Failed to capture screenshot", "error");
         }
       })
-      .catch(error => console.error('Screenshot capture error:', error));
+      .catch(error => console.error("Screenshot capture error:", error));
   };
 
   // Proctoring monitoring effect - only starts after initial check passes
@@ -111,7 +124,7 @@ const Exam = () => {
 
     if (!isExamOver && isCheckPassed) {
       intervalId = setInterval(() => {
-        fetch('http://127.0.0.1:5000/status')
+        fetch("http://127.0.0.1:5000/status")
           .then(response => response.json())
           .then(data => {
             setStatus(data);
@@ -121,9 +134,9 @@ const Exam = () => {
               setWarnings(prev => {
                 const newCount = prev.cellphone + 1;
                 if (newCount === 1) {
-                  addAlert('⚠ Warning: Cellphone detected!');
+                  addAlert("⚠ Warning: Cellphone detected!");
                 } else if (newCount === 2) {
-                  addAlert('❌ Test terminated due to cellphone usage', 'error');
+                  addAlert("❌ Test terminated due to cellphone usage", "error");
                   captureScreenshot();
                   setIsExamOver(true);
                 }
@@ -136,11 +149,11 @@ const Exam = () => {
               setWarnings(prev => {
                 const newCount = prev.person + 1;
                 if (newCount === 1) {
-                  addAlert('⚠ Warning: Multiple persons detected!');
+                  addAlert("⚠ Warning: Multiple persons detected!");
                 } else if (newCount === 2) {
-                  addAlert('⚠ Final warning: Multiple persons detected!');
+                  addAlert("⚠ Final warning: Multiple persons detected!");
                 } else if (newCount === 3) {
-                  addAlert('❌ Test terminated due to multiple persons', 'error');
+                  addAlert("❌ Test terminated due to multiple persons", "error");
                   captureScreenshot();
                   setIsExamOver(true);
                 }
@@ -155,11 +168,11 @@ const Exam = () => {
                   setWarnings(prev => {
                     const newCount = prev.noPerson + 1;
                     if (newCount === 1) {
-                      addAlert('⚠ Warning: No person detected!');
+                      addAlert("⚠ Warning: No person detected!");
                     } else if (newCount === 2) {
-                      addAlert('⚠ Final warning: No person detected!');
+                      addAlert("⚠ Final warning: No person detected!");
                     } else if (newCount === 3) {
-                      addAlert('❌ Test terminated due to no person detected', 'error');
+                      addAlert("❌ Test terminated due to no person detected", "error");
                       captureScreenshot();
                       setIsExamOver(true);
                     }
@@ -174,7 +187,7 @@ const Exam = () => {
               }
             }
           })
-          .catch(error => console.error('Error:', error));
+          .catch(error => console.error("Error:", error));
       }, 1000);
     }
 
@@ -237,14 +250,14 @@ const Exam = () => {
               </div>
               <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
                 <span>Person Detected:</span>
-                <span className={`font-bold ${status.person_count === 1 ? 'text-green-600' : 'text-red-600'}`}>
-                  {status.person_count === 1 ? '✅' : '❌'}
+                <span className={`font-bold ${status.person_count === 1 ? "text-green-600" : "text-red-600"}`}>
+                  {status.person_count === 1 ? "✅" : "❌"}
                 </span>
               </div>
               <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
                 <span>No Phone Detected:</span>
-                <span className={`font-bold ${!status.cellphone_detected ? 'text-green-600' : 'text-red-600'}`}>
-                  {!status.cellphone_detected ? '✅' : '❌'}
+                <span className={`font-bold ${!status.cellphone_detected ? "text-green-600" : "text-red-600"}`}>
+                  {!status.cellphone_detected ? "✅" : "❌"}
                 </span>
               </div>
             </div>

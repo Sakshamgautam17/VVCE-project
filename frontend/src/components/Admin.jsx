@@ -1,131 +1,162 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react'
 
-const Admin = () => {
-  const [questionFile, setQuestionFile] = useState(null);
-  const [studentFile, setStudentFile] = useState(null);
-  const [uploadStatus, setUploadStatus] = useState(""); // For feedback after file upload
-  const navigate = useNavigate();
+function Admin() {
+  const [csvMessage, setCsvMessage] = useState('')
+  const [docMessage, setDocMessage] = useState('')
+  const [csvFile, setCsvFile] = useState(null)
+  const [docFile, setDocFile] = useState(null)
+  const [mcqData, setMcqData] = useState(null)
 
-  // Handle question file selection
-  const handleQuestionFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type === "text/csv") {
-      setQuestionFile(file);
+  const handleCsvFileChange = (e) => {
+    setCsvFile(e.target.files[0])
+  }
+
+  const handleDocFileChange = (e) => {
+    setDocFile(e.target.files[0])
+  }
+
+  const handleCsvUpload = () => {
+    if (!csvFile) {
+      alert('Please upload a CSV file.')
+      return
     }
-  };
 
-  // Handle student file selection
-  const handleStudentFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type === "text/csv") {
-      setStudentFile(file);
-    }
-  };
+    const formData = new FormData()
+    formData.append('file', csvFile)
 
-  // Handle file uploads dynamically based on the file type
-  const handleFileUpload = (file, type) => {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    // Set different endpoints for student list and question paper uploads
-    const endpoint =
-      type === "Student List"
-        ? "http://localhost:5000/api/uploads/students"
-        : "http://localhost:5000/api/uploads/questions";
-
-    // Perform the file upload
-    fetch(endpoint, {
-      method: "POST",
-      body: formData,
+    fetch('http://127.0.0.1:5001/upload-csv', {
+      method: 'POST',
+      body: formData
     })
-      .then((res) => res.json())
-      .then((data) => {
-        setUploadStatus(`${type} uploaded successfully`);
-        console.log(`${type} uploaded successfully`, data);
+      .then(response => response.json())
+      .then(data => setCsvMessage(data.message))
+      .catch(error => {
+        console.error('Error:', error)
+        setCsvMessage('Error uploading file')
       })
-      .catch((error) => {
-        setUploadStatus(`Error uploading ${type}: ${error.message}`);
-        console.error(`Error uploading ${type}:`, error);
-      });
-  };
+  }
 
-  // Handle submit when both files are uploaded
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (questionFile) handleFileUpload(questionFile, "Question Paper");
-    if (studentFile) handleFileUpload(studentFile, "Student List");
-  };
+  const handleDocUpload = () => {
+    if (!docFile) {
+      alert('Please upload a document file.')
+      return
+    }
+
+    const formData = new FormData()
+    formData.append('file', docFile)
+
+    fetch('http://127.0.0.1:5001/upload-document', {
+      method: 'POST',
+      body: formData
+    })
+      .then(response => response.json())
+      .then(data => setDocMessage(data.message))
+      .catch(error => {
+        console.error('Error:', error)
+        setDocMessage('Error uploading document')
+      })
+  }
+
+  const handleFetchMcq = () => {
+    fetch('http://127.0.0.1:5001/fetch-mcq', {
+      method: 'GET'
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.mcq_data) {
+          setMcqData(data.mcq_data)
+          setDocMessage("MCQs fetched successfully")
+        } else {
+          setDocMessage(data.error || 'Failed to fetch MCQs')
+          setMcqData(null)
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error)
+        setDocMessage('Error fetching MCQs')
+        setMcqData(null)
+      })
+  }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center">
-      {/* Header */}
-      <div className="bg-blue-600 text-white w-full py-4 text-center text-3xl font-bold">
-        Admin Dashboard
-      </div>
-
-      {/* Button to redirect to login */}
-      <div className="mt-6">
-        <button
-          className="btn btn-primary text-lg"
-          onClick={() => navigate("/login")}
+    <div className="flex min-h-screen items-center justify-center flex-col p-8">
+      <h1 className="text-3xl font-bold mb-8">File Upload System</h1>
+      
+      {/* CSV Upload Section */}
+      <div className="mb-8 p-6 border rounded-lg w-full max-w-md">
+        <h2 className="text-xl font-semibold mb-4">Upload CSV</h2>
+        <input 
+          type="file" 
+          accept=".csv" 
+          onChange={handleCsvFileChange}
+          className="mb-4" 
+        />
+        <button 
+          onClick={handleCsvUpload} 
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors"
         >
-          Go to Login Page
+          Upload CSV
         </button>
+        {csvMessage && <p className="mt-4 text-green-600">{csvMessage}</p>}
       </div>
 
-      {/* Main Content */}
-      <div className="w-full max-w-6xl mt-10 bg-white rounded-lg shadow-lg p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Left Section - Upload Question Paper */}
-        <div className="flex flex-col items-center">
-          <h2 className="text-2xl font-semibold mb-4">Upload Question Paper</h2>
-          <div className="form-control w-full">
-            <input
-              type="file"
-              accept=".csv"
-              className="file-input file-input-bordered w-full"
-              onChange={handleQuestionFileChange}
-            />
-          </div>
-          {questionFile && (
-            <p className="mt-2 text-green-500">
-              File selected: {questionFile.name}
-            </p>
-          )}
-        </div>
-
-        {/* Right Section - Upload Student List */}
-        <div className="flex flex-col items-center">
-          <h2 className="text-2xl font-semibold mb-4">Upload Student List</h2>
-          <div className="form-control w-full">
-            <input
-              type="file"
-              accept=".csv"
-              className="file-input file-input-bordered w-full"
-              onChange={handleStudentFileChange}
-            />
-          </div>
-          {studentFile && (
-            <p className="mt-2 text-green-500">
-              File selected: {studentFile.name}
-            </p>
-          )}
-        </div>
-      </div>
-
-      {/* Submit Button */}
-      <div className="mt-8">
-        <button
-          className="btn btn-success text-lg px-8 py-2"
-          onClick={handleSubmit}
+      {/* Document Upload Section */}
+      <div className="p-6 border rounded-lg w-full max-w-md">
+        <h2 className="text-xl font-semibold mb-4">Upload Question Paper</h2>
+        <input 
+          type="file" 
+          accept=".pdf,.docx,.txt" 
+          onChange={handleDocFileChange}
+          className="mb-4" 
+        />
+        <button 
+          onClick={handleDocUpload} 
+          className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition-colors"
         >
-          Upload Files
+          Upload Document
         </button>
-        {/* Display upload status */}
-        {uploadStatus && <p className="mt-4 text-green-600">{uploadStatus}</p>}
+        <button 
+          onClick={handleFetchMcq} 
+          className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 transition-colors ml-4"
+        >
+          Fetch MCQs
+        </button>
+        {docMessage && <p className="mt-4 text-green-600">{docMessage}</p>}
       </div>
+
+      {/* MCQ Display Section */}
+      {mcqData && (
+        <div className="mt-8 p-6 border rounded-lg w-full max-w-2xl">
+          <h2 className="text-xl font-semibold mb-4">Generated MCQs</h2>
+          <div className="space-y-6">
+            {mcqData.map((mcq, index) => (
+              <div key={mcq.id} className="p-4 bg-gray-100 rounded-lg">
+                <p className="text-lg font-medium">
+                  Q{index + 1}. {mcq.question}
+                </p>
+                <div className="mt-3 space-y-2">
+                  {mcq.options.map((option, i) => (
+                    <label key={i} className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        name={`question-${mcq.id}`}
+                        value={option}
+                        className="form-radio text-blue-600"
+                      />
+                      <span>{option}</span>
+                    </label>
+                  ))}
+                </div>
+                <p className="mt-3 text-sm text-green-600">
+                  Correct Answer: {mcq.correctAnswer}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default Admin;
+export default Admin
