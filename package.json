@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "axios": "^1.7.7",
-    "flask": "^0.2.10"
+    "flask": "^0.2.10",
+    "lucide-react": "^0.453.0"
   }
 }
