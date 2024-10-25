@@ -9,7 +9,7 @@ const Home = ({ onLogout }) => {
   };
 
   const handleTrialTest = () => {
-    alert("Trial Test Clicked");
+    navigate("/begin-trial"); // Navigate to the Begin Trial page
   };
 
   const handleLogout = () => {
@@ -25,7 +25,7 @@ const Home = ({ onLogout }) => {
         <button className="btn btn-primary text-2xl" onClick={handleStartTest}>
           Start Test
         </button>
-        <button className="btn btn-primary text-2xl" onClick={handleStartTest}>
+        <button className="btn btn-primary text-2xl" onClick={handleTrialTest}>
           Trial Test
         </button>
         <button className="btn btn-primary text-2xl" onClick={handleLogout}>

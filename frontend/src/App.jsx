@@ -9,8 +9,10 @@ import "./App.css";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Begin from "./components/Begin";
-import Exam from "./components/Exam"; // Import the Exam component
+import Exam from "./components/Exam";
 import Admin from "./components/Admin";
+import BeginTrial from "./components/BeginTrial";
+import TrialTest from "./components/TrialTest"; // Import the TrialTest component
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,13 +39,10 @@ function App() {
     <Router>
       <div>
         <Routes>
-          {/* Redirect to login if user not logged in */}
           <Route path="/" element={<Navigate to="/login" />} />
 
-          {/* Login page route */}
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
 
-          {/* Home route protected by authentication */}
           <Route
             path="/home"
             element={
@@ -55,13 +54,16 @@ function App() {
             }
           />
 
-          {/* Begin page protected by authentication */}
           <Route
             path="/begin"
             element={isLoggedIn ? <Begin /> : <Navigate to="/login" />}
           />
 
-          {/* Exam page protected by authentication */}
+          <Route
+            path="/begin-trial"
+            element={isLoggedIn ? <BeginTrial /> : <Navigate to="/login" />}
+          />
+
           <Route
             path="/exam"
             element={isLoggedIn ? <Exam /> : <Navigate to="/login" />}
@@ -70,6 +72,12 @@ function App() {
           <Route
             path="/admin"
             element={isLoggedIn ? <Admin /> : <Navigate to="/login" />}
+          />
+
+          {/* TrialTest page route with questions from examQ.json */}
+          <Route
+            path="/trial-exam"
+            element={isLoggedIn ? <TrialTest /> : <Navigate to="/login" />}
           />
         </Routes>
       </div>
