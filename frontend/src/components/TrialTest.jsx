@@ -6,6 +6,9 @@ const TrialTest = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
+  const [selectedAnswers, setSelectedAnswers] = useState(
+    Array(questions.length).fill(null)
+  ); // Store selected answers
   const navigate = useNavigate();
 
   // Fetch questions from the JSON file
@@ -49,8 +52,23 @@ const TrialTest = () => {
     }
   };
 
+  const handleAnswerSelect = (answer) => {
+    // Store the selected answer for the current question
+    const updatedAnswers = [...selectedAnswers];
+    updatedAnswers[currentQuestionIndex] = answer;
+    setSelectedAnswers(updatedAnswers);
+  };
+
   const handleSubmit = () => {
-    alert("Exam submitted!"); // You can replace this with more functionality
+    // Calculate the score based on selected answers
+    let score = 0;
+    questions.forEach((question, index) => {
+      if (selectedAnswers[index] === question.correctAnswer) {
+        score++;
+      }
+    });
+
+    alert(`Exam submitted! Your score: ${score} out of ${questions.length}`); // Display score
     navigate("/home"); // Redirect to home or any other page after submission
   };
 
@@ -77,7 +95,17 @@ const TrialTest = () => {
           <h2 className="text-lg font-semibold">{currentQuestion.question}</h2>
           <ul className="list-disc list-inside space-y-2">
             {currentQuestion.options.map((option, index) => (
-              <li key={index}>{option}</li>
+              <li key={index} className="flex items-center">
+                <input
+                  type="radio"
+                  name={`question-${currentQuestionIndex}`}
+                  value={option}
+                  checked={selectedAnswers[currentQuestionIndex] === option} // Check if this option is selected
+                  onChange={() => handleAnswerSelect(option)} // Update selected answer
+                  className="mr-2"
+                />
+                {option}
+              </li>
             ))}
           </ul>
         </div>
