@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Camera, Shield, Eye, CheckCircle } from "lucide-react";
-import bg from '../bg.gif'
+import bg from '../bg.gif';
+
 // Simple Button component since we can't access shadcn/ui
 const Button = ({ children, variant = "default", className = "", onClick, ...props }) => {
   const baseStyles = "px-4 py-2 rounded-md font-medium transition-all duration-200";
@@ -24,6 +25,7 @@ const Button = ({ children, variant = "default", className = "", onClick, ...pro
 const LandingPage = () => {
   const [scrolled, setScrolled] = useState(false);
   const featuresRef = useRef(null);
+  const aboutRef = useRef(null);  // New reference for About section
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,19 +40,21 @@ const LandingPage = () => {
     featuresRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const scrollToAbout = () => {  // New scroll function for About
+    aboutRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   const handleLoginClick = () => {
     navigate("/login");
   };
 
   return (
     <div className="min-h-screen bg-black text-white">
-  {/* Video Background */}
-  <div className="fixed inset-0 z-0">
-    <div className="absolute inset-0 bg-black/60 z-10" />
-    <img src={bg} className="w-full h-full object-cover" alt="background" />
-  </div>
-
-
+      {/* Video Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-black/60 z-10" />
+        <img src={bg} className="w-full h-full object-cover" alt="background" />
+      </div>
 
       {/* Navbar */}
       <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? "bg-black/80 backdrop-blur-lg" : "bg-transparent"}`}>
@@ -62,7 +66,7 @@ const LandingPage = () => {
             <Button variant="ghost" className="text-white hover:text-blue-400" onClick={scrollToFeatures}>
               Features
             </Button>
-            <Button variant="ghost" className="text-white hover:text-blue-400">
+            <Button variant="ghost" className="text-white hover:text-blue-400" onClick={scrollToAbout}>  {/* Link About button to scroll */}
               About
             </Button>
             <Button variant="ghost" className="text-white hover:text-blue-400">
@@ -96,49 +100,65 @@ const LandingPage = () => {
       </div>
 
       {/* Features Grid */}
-<div ref={featuresRef} className="relative z-10 bg-black/80 backdrop-blur-lg py-32">
-  <div className="max-w-7xl mx-auto px-6">
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12"> {/* Adjusted grid layout */}
-      {[
-        {
-          icon: <Camera className="w-12 h-12 text-blue-400" />,
-          title: "Real-time Monitoring",
-          description: "Advanced facial recognition and environment scanning"
-        },
-        {
-          icon: <Shield className="w-12 h-12 text-blue-400" />,
-          title: "Fraud Prevention",
-          description: "AI-powered behavior analysis and pattern detection"
-        },
-        {
-          icon: <Eye className="w-12 h-12 text-blue-400" />, // New icon suggestion
-          title: "No Manual Invigilation",
-          description: "Fully automated monitoring through advanced AI technology"
-        },
-        {
-          icon: <CheckCircle className="w-12 h-12 text-blue-400" />, // New icon suggestion
-          title: "Easy and Convenient to Use",
-          description: "User-friendly design with minimal setup required"
-        }
-      ].map((feature, index) => (
-        <div
-          key={index}
-          className="group p-8 rounded-2xl bg-gradient-to-br from-gray-900/80 to-gray-800/80 
-            hover:from-blue-900/20 hover:to-cyan-900/20 transition-all duration-300 backdrop-blur-sm"
-        >
-          <div className="mb-6 transform group-hover:scale-110 transition-transform">
-            {feature.icon}
+      <div ref={featuresRef} className="relative z-10 bg-black/80 backdrop-blur-lg py-32">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12">
+            {[
+              {
+                icon: <Camera className="w-12 h-12 text-blue-400" />,
+                title: "Real-time Monitoring",
+                description: "Advanced facial recognition and environment scanning"
+              },
+              {
+                icon: <Shield className="w-12 h-12 text-blue-400" />,
+                title: "Fraud Prevention",
+                description: "AI-powered behavior analysis and pattern detection"
+              },
+              {
+                icon: <Eye className="w-12 h-12 text-blue-400" />,
+                title: "No Manual Invigilation",
+                description: "Fully automated monitoring through advanced AI technology"
+              },
+              {
+                icon: <CheckCircle className="w-12 h-12 text-blue-400" />,
+                title: "Easy and Convenient to Use",
+                description: "User-friendly design with minimal setup required"
+              }
+            ].map((feature, index) => (
+              <div
+                key={index}
+                className="group p-8 rounded-2xl bg-gradient-to-br from-gray-900/80 to-gray-800/80 
+                  hover:from-blue-900/20 hover:to-cyan-900/20 transition-all duration-300 backdrop-blur-sm"
+              >
+                <div className="mb-6 transform group-hover:scale-110 transition-transform">
+                  {feature.icon}
+                </div>
+                <h3 className="text-2xl font-semibold mb-4">{feature.title}</h3>
+                <p className="text-gray-400">{feature.description}</p>
+              </div>
+            ))}
           </div>
-          <h3 className="text-2xl font-semibold mb-4">{feature.title}</h3>
-          <p className="text-gray-400">{feature.description}</p>
         </div>
-      ))}
-    </div>
-  </div>
-</div>
+      </div>
 
-
-
+      {/* About Section */}
+      <div ref={aboutRef} className="relative z-10 bg-gray-900 min-h-screen flex items-center py-32"> {/* Updated About section */}
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <h2 className="text-5xl font-bold text-blue-400 mb-8">About ProcX</h2>
+          <p className="text-lg text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
+            ProcX is a revolutionary AI-driven proctoring solution designed to uphold the integrity of online examinations
+            in educational institutions and corporate training environments. Our platform integrates state-of-the-art
+            facial recognition, environment monitoring, and behavioral analysis to provide seamless, secure, and automated
+            exam invigilation. With a focus on delivering a streamlined user experience, ProcX aims to make remote exams
+            both fair and accessible.
+          </p>
+          <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            ProcX is built on cutting-edge technology, ensuring minimal interruptions
+            and maximum security. Whether you're a student or an administrator, ProcX is here to simplify and safeguard
+            the examination process, making academic honesty a priority.
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
