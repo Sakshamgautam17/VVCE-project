@@ -112,7 +112,7 @@ const TrialTest = () => {
 
         <div className="flex justify-between">
           <button
-            className="btn btn-secondary"
+            className="btn btn-primary"
             onClick={handleNext}
             disabled={currentQuestionIndex === questions.length - 1}
           >

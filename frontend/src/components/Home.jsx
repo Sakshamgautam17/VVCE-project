@@ -41,7 +41,7 @@ const Home = ({ onLogout }) => {
       <div className="absolute bottom-20 right-10 bg-blue-400 w-52 h-52 rounded-full opacity-30 animate-pulse"></div>
 
       <h1 className="text-5xl font-bold text-white mb-4 animate-fadeIn">
-        Welcome back!
+        Welcome!
       </h1>
       <p className="text-lg text-white mb-8 text-center max-w-md animate-fadeIn">
         Choose an option to get started with your testing journey:
@@ -67,19 +67,6 @@ const Home = ({ onLogout }) => {
         >
           <FaSignOutAlt className="mr-2" /> Logout
         </button>
-      </div>
-
-      {/* Additional Information Section */}
-      <div className="bg-white text-gray-800 p-6 rounded-lg shadow-md w-full max-w-md text-center mb-6 animate-fadeIn">
-        <h2 className="text-2xl font-semibold mb-2">Test Guidelines</h2>
-        <p className="mb-4">
-          Each test contains multiple-choice questions that assess your
-          knowledge.
-        </p>
-        <p className="mb-4">
-          Read each question carefully and choose the best answer.
-        </p>
-        <p className="mb-4">Prepare well and good luck!</p>
       </div>
 
       {/* Optional Footer */}
