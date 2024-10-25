@@ -25,7 +25,7 @@ genai.configure(api_key="AIzaSyBUMe2-XC6k-z0Y2C0vPy1ySu7mTVqH7Fc")
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 # Direct MongoDB connection
-client = MongoClient("mongodb+srv://gautamsaksham17:DqdrBPREU@cluster0.byhmz.mongodb.net/")
+client = MongoClient("mongodb+srv://gautamsaksham17:DqdrBPdjzQ6NpREU@cluster0.byhmz.mongodb.net/")
 db = client['test']
 users_collection = db['users']
 
@@ -128,6 +128,51 @@ def fetch_mcq():
             "mcq_data": json.loads(mcq_json)
         }), 200
     
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+@app.route('/add-student', methods=['POST'])
+def add_student():
+    try:
+        data = request.json
+        password = generate_random_password()
+        user = {
+            "name": data['name'],
+            "email": data['email'],
+            "password": password
+        }
+        users_collection.insert_one(user)
+        return jsonify({
+            "message": f"Student added successfully. Password: {password}"
+        }), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/add-question', methods=['POST'])
+def add_question():
+    try:
+        data = request.json
+        
+        # Create the file if it doesn't exist
+        file_path = os.path.join(UPLOAD_FOLDER, 'exam.txt')
+        
+        # Format the question
+        question_text = (
+            f"\n {data['question']}\n"
+            f"Options:\n"
+            f"1. {data['options'][0]}\n"
+            f"2. {data['options'][1]}\n"
+            f"3. {data['options'][2]}\n"
+            f"4. {data['options'][3]}\n"
+            f"Correct Answer: {data['correctAnswer']}\n"
+        )
+        
+        # Append the question to the file
+        with open(file_path, 'a', encoding='utf-8') as file:
+            file.write(question_text)
+        
+        return jsonify({
+            "message": "Question added successfully"
+        }), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
