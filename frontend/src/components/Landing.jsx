@@ -213,11 +213,10 @@ const Landing= () => {
             Advanced AI-powered exam monitoring system that ensures academic integrity while providing a seamless experience.
           </p>
           <Button 
-            variant="pricing"
-            className="mb-8"
+            className="mb-8 btn-info btn"
             onClick={() => scrollToSection(pricingRef)}
           >
-            Check out our prices starting from ₹299
+          <p className=" text-lg">  Check out our prices!!</p>
           </Button>
           <p className="text-lg text-blue-400 mt-8">
             Developed by reactJK
