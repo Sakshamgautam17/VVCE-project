@@ -224,7 +224,24 @@ function Admin() {
               className="input input-bordered w-full"
               required
             />
-            <button type="submit" className="btn btn-primary w-full">
+
+          
+        
+            <h3 className="text-lg font-medium">Upload Student Photo (JPG)</h3>
+            <input
+              type="file"
+              accept=".jpg"
+              className="mb-4 w-full file-input file-input-bordered"
+            />
+            <button
+              className="btn btn-primary w-full"
+            >
+              Upload JPG
+            </button>
+         
+
+            
+            <button type="submit" className="btn btn-primary w-full ">
               Add Student
             </button>
           </form>
@@ -291,6 +308,7 @@ function Admin() {
               className="input input-bordered w-full"
               required
             />
+            
             <button type="submit" className="btn btn-secondary w-full">
               Add Question
             </button>
