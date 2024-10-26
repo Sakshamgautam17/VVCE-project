@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
+
 const Exam = () => {
   const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(600); 
+  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [isExamOver, setIsExamOver] = useState(false);
   const [isNPressed, setIsNPressed] = useState(false);
   const nKeyRef = useRef(false);
-
-
 
   // Proctoring states
   const [status, setStatus] = useState({ person_count: 0, cellphone_detected: false });
@@ -34,7 +33,7 @@ const Exam = () => {
   const [isCheckPassed, setIsCheckPassed] = useState(false);
   const [checkStatus, setCheckStatus] = useState("Initializing...");
 
-    // Modified N key handler
+   // Modified N key handler
     useEffect(() => {
       console.log('Setting up N key handler');
       
@@ -53,26 +52,12 @@ const Exam = () => {
         window.removeEventListener('keydown', handleKeyPress);
       };
     }, []);
-    
- // Initialize exam and monitoring
- useEffect(() => {
-  if (isInitialCheck) {
-    startProctoring();
-    checkEnvironment();
-    fetchMCQs();
-    const cleanup = monitorTabSwitch();
-    return () => {
-      cleanup();
-      stopProctoring();
-    };
-  }
-}, [isInitialCheck]);
 
   // Initialize exam and monitoring
   useEffect(() => {
     if (isInitialCheck) {
       startProctoring();
-      checkEnvironment();  // Initialize the environment check
+      checkEnvironment();
       fetchMCQs();
       const cleanup = monitorTabSwitch();
       return () => {
@@ -80,7 +65,7 @@ const Exam = () => {
         stopProctoring();
       };
     }
-  }, [isInitialCheck]);
+  }, []);
 
   // Start continuous monitoring after exam starts
   useEffect(() => {
@@ -211,7 +196,7 @@ const Exam = () => {
         if (newCount === 1) {
           addAlert("⚠️ Warning: No person detected!", "warning");
           captureViolationScreenshot();
-        } else if (newCount >= 2) {
+        } else if (newCount >= 3) {
           handleExamEnd("Test terminated: Extended period with no person detected");
         }
         return { ...prev, noPerson: newCount };
@@ -227,7 +212,7 @@ const Exam = () => {
         if (newCount === 1) {
           addAlert("⚠️ Warning: Multiple people detected!", "warning");
           captureViolationScreenshot();
-        } else if (newCount >= 2) {
+        } else if (newCount >= 3) {
           handleExamEnd("Test terminated: Multiple people detected repeatedly");
         }
         return { ...prev, multiplePeople: newCount };
@@ -243,7 +228,7 @@ const Exam = () => {
         if (newCount === 1) {
           addAlert("⚠️ Warning: Cell phone detected!", "warning");
           captureViolationScreenshot();
-        } else if (newCount >= 1) {
+        } else if (newCount >= 2) {
           handleExamEnd("Test terminated: Cell phone detected multiple times");
         }
         return { ...prev, cellphone: newCount };
@@ -301,7 +286,6 @@ const Exam = () => {
       clearInterval(checkInterval);
     };
   };
-
 
 
   // Capture violation screenshot
@@ -372,8 +356,8 @@ const Exam = () => {
               </div>
               <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
                 <span>Person Detected:</span>
-                <span className={`font-bold ${status.person_count === 1 ? "text-green-600" : "text-red-600"}`}>
-                  {(status.person_count === 1 && isNPressed) ? "✅" : "❌"}
+                <span className={`font-bold ${status.person_count === 1  ? "text-green-600" : "text-red-600"}`}>
+                  {status.person_count === 1 && isNPressed ? "✅" : "❌"}
                 </span>
               </div>
               <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
